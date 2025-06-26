@@ -90,7 +90,7 @@ async def get_tools_fast():
     return tools_cache
 
 
-# Static tool definitions for instant discovery (no imports needed)
+# Static tool definitions for instant discovery (strict MCP compliance)
 STATIC_TOOLS = [
     {
         "name": "simulate_two_level_atom",
@@ -98,10 +98,11 @@ STATIC_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "rabi_frequency": {"type": "number", "description": "Rabi frequency in Hz"},
-                "detuning": {"type": "number", "description": "Detuning from resonance in Hz"},
-                "evolution_time": {"type": "number", "description": "Evolution time in seconds"}
-            }
+                "rabi_frequency": {"type": "number"},
+                "detuning": {"type": "number"},
+                "evolution_time": {"type": "number"}
+            },
+            "required": ["rabi_frequency", "detuning", "evolution_time"]
         }
     },
     {
@@ -110,10 +111,11 @@ STATIC_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "rabi_frequency": {"type": "number", "description": "Rabi frequency in Hz"},
-                "max_time": {"type": "number", "description": "Maximum evolution time"},
-                "time_points": {"type": "integer", "description": "Number of time points"}
-            }
+                "rabi_frequency": {"type": "number"},
+                "max_time": {"type": "number"},
+                "time_points": {"type": "integer"}
+            },
+            "required": ["rabi_frequency", "max_time"]
         }
     },
     {
@@ -122,9 +124,10 @@ STATIC_TOOLS = [
         "inputSchema": {
             "type": "object", 
             "properties": {
-                "particle_number": {"type": "integer", "description": "Number of particles"},
-                "scattering_length": {"type": "number", "description": "Scattering length in nm"}
-            }
+                "particle_number": {"type": "integer"},
+                "scattering_length": {"type": "number"}
+            },
+            "required": ["particle_number", "scattering_length"]
         }
     },
     {
@@ -133,9 +136,10 @@ STATIC_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "transition_frequency": {"type": "number", "description": "Transition frequency"},
-                "linewidth": {"type": "number", "description": "Natural linewidth"}
-            }
+                "transition_frequency": {"type": "number"},
+                "linewidth": {"type": "number"}
+            },
+            "required": ["transition_frequency", "linewidth"]
         }
     },
     {
@@ -144,9 +148,10 @@ STATIC_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "coupling_strength": {"type": "number", "description": "Coupling strength"},
-                "cavity_frequency": {"type": "number", "description": "Cavity frequency"}
-            }
+                "coupling_strength": {"type": "number"},
+                "cavity_frequency": {"type": "number"}
+            },
+            "required": ["coupling_strength", "cavity_frequency"]
         }
     }
 ]
@@ -317,16 +322,12 @@ async def mcp_endpoint(request: Request):
                 return {"jsonrpc": "2.0", "id": request_id, "result": {}}
             
             elif method == "ping":
-                # Ping method for connectivity testing
-                logger.info("MCP ping request - responding immediately")
+                # Ping method for connectivity testing - must return empty result per MCP spec
+                logger.info("MCP ping request - responding with empty result")
                 return {
                     "jsonrpc": "2.0",
                     "id": request_id,
-                    "result": {
-                        "status": "pong",
-                        "timestamp": time.time(),
-                        "server": "rabi-mcp-server"
-                    }
+                    "result": {}
                 }
             
             elif method == "resources/list":
