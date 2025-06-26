@@ -7,6 +7,7 @@ Rabi MCP Server - Advanced Atomic, Molecular and Optical Physics
 import json
 import logging
 import asyncio
+import time
 from typing import Any, Dict, List, Optional
 from contextlib import asynccontextmanager
 
@@ -315,6 +316,37 @@ async def mcp_endpoint(request: Request):
                 logger.info("MCP initialized notification received")
                 return {"jsonrpc": "2.0", "id": request_id, "result": {}}
             
+            elif method == "ping":
+                # Ping method for connectivity testing
+                logger.info("MCP ping request - responding immediately")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {
+                        "status": "pong",
+                        "timestamp": time.time(),
+                        "server": "rabi-mcp-server"
+                    }
+                }
+            
+            elif method == "resources/list":
+                # Resources list - we don't have resources, return empty
+                logger.info("MCP resources/list request - returning empty list")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {"resources": []}
+                }
+            
+            elif method == "prompts/list":
+                # Prompts list - we don't have prompts, return empty  
+                logger.info("MCP prompts/list request - returning empty list")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {"prompts": []}
+                }
+            
             elif method == "tools/list":
                 # Use minimal tool list for fast discovery during Smithery scanning
                 # Check if this is an initial discovery request vs a full client request
@@ -365,7 +397,17 @@ async def mcp_endpoint(request: Request):
                 }
             
             else:
-                raise HTTPException(status_code=400, detail=f"Unknown method: {method}")
+                # Unknown method - return JSON-RPC error instead of HTTP error
+                logger.warning(f"Unknown MCP method: {method}")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "error": {
+                        "code": -32601,
+                        "message": "Method not found",
+                        "data": {"method": method}
+                    }
+                }
         
         # Handle direct tool calls
         elif "tool" in body:
@@ -384,10 +426,27 @@ async def mcp_endpoint(request: Request):
             raise HTTPException(status_code=400, detail="Invalid request format")
             
     except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Invalid JSON")
+        logger.error("Invalid JSON in MCP request")
+        return {
+            "jsonrpc": "2.0",
+            "id": 0,
+            "error": {
+                "code": -32700,
+                "message": "Parse error",
+                "data": "Invalid JSON"
+            }
+        }
     except Exception as e:
         logger.error(f"Error in MCP endpoint: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        return {
+            "jsonrpc": "2.0", 
+            "id": 0,
+            "error": {
+                "code": -32603,
+                "message": "Internal error",
+                "data": str(e)
+            }
+        }
 
 
 
