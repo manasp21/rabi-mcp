@@ -257,29 +257,44 @@ async def load_full_tools():
     return _full_tools_cache
 
 def main():
-    """Main entry point with conditional uvicorn import."""
+    """Main entry point with robust error handling and logging."""
     import os
     
-    port = int(os.getenv("PORT", 8000))
-    host = os.getenv("HOST", "0.0.0.0")
-    
-    logger.info(f"Starting ultra-minimal Rabi MCP Server on {host}:{port}")
-    
-    # Import uvicorn only when actually starting server
-    import uvicorn
-    
-    # Create the app
-    app = create_app()
-    
-    # Start server
-    uvicorn.run(
-        app,
-        host=host,
-        port=port,
-        reload=False,
-        workers=1,
-        log_level="info",
-    )
+    try:
+        port = int(os.getenv("PORT", 8000))
+        host = os.getenv("HOST", "0.0.0.0")
+        
+        logger.info(f"Configuring server: {host}:{port}")
+        logger.info(f"Environment: PORT={os.getenv('PORT')}, HOST={os.getenv('HOST')}")
+        
+        # Import uvicorn only when actually starting server
+        logger.info("Importing uvicorn...")
+        import uvicorn
+        
+        # Create the app with error handling
+        logger.info("Creating FastAPI app...")
+        app = create_app()
+        logger.info("FastAPI app created successfully")
+        
+        # Start server with comprehensive configuration
+        logger.info(f"Starting uvicorn server on {host}:{port}...")
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            reload=False,
+            workers=1,
+            log_level="info",
+            access_log=True,
+            server_header=False,
+            timeout_keep_alive=30,
+        )
+        
+    except Exception as e:
+        logger.error(f"Server startup failed: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
 if __name__ == "__main__":
     main()
