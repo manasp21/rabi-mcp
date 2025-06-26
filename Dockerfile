@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     liblapack-dev \
     libfftw3-dev \
     pkg-config \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files
@@ -37,5 +38,12 @@ RUN useradd --create-home --shell /bin/bash app && \
     chown -R app:app /app
 USER app
 
-# Run the MCP server
-CMD ["python", "-m", "src.mcp_server"]
+# Expose port for HTTP server
+EXPOSE 8000
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the HTTP MCP server
+CMD ["python", "-m", "src.http_server"]

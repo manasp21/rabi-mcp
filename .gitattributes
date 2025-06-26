@@ -1,0 +1,35 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force Unix line endings for scripts
+*.sh text eol=lf
+scripts/* text eol=lf
+
+# Force Unix line endings for Python files
+*.py text eol=lf
+
+# Force Unix line endings for config files
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+Dockerfile text eol=lf
+requirements.txt text eol=lf
+
+# Force Unix line endings for documentation
+*.md text eol=lf
+*.txt text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.tar.gz binary
+
+# Don't track virtual environments
+venv/ export-ignore
+env/ export-ignore
+.env export-ignore

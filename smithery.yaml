@@ -4,9 +4,10 @@ build:
   dockerfile: "Dockerfile"
   dockerBuildPath: "."
 startCommand:
-  type: "mcp"
+  type: "http"
+  port: 8000
   command: "python"
-  args: ["-m", "src.mcp_server"]
+  args: ["-m", "src.http_server"]
 configSchema:
   type: "object"
   properties:
