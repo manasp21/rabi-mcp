@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  rabi-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - MCP_SERVER_NAME=rabi-mcp-server
+      - MCP_SERVER_VERSION=1.0.0
+      - COMPUTATIONAL_BACKEND=numpy
+      - MAX_HILBERT_DIM=1000
+      - ENABLE_GPU=false
+      - PRECISION=double
+      - ENABLE_PARALLEL=true
+      - CACHE_RESULTS=true
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  default:
+    name: rabi-mcp-network

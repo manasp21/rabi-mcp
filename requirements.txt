@@ -1,0 +1,45 @@
+# Core Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+matplotlib>=3.6.0
+sympy>=1.11.0
+
+# Quantum Physics Specialized Libraries
+qutip>=4.7.0
+qiskit>=0.39.0
+pennylane>=0.28.0
+ase>=3.22.0
+
+# MCP & Server Framework
+mcp>=1.0.0
+fastapi>=0.95.0
+uvicorn>=0.20.0
+pydantic>=1.10.0
+python-multipart>=0.0.5
+
+# Advanced Numerics & Performance
+numba>=0.56.0
+h5py>=3.8.0
+joblib>=1.2.0
+
+# Visualization & Data Analysis
+plotly>=5.12.0
+seaborn>=0.11.0
+ipywidgets>=8.0.0
+
+# Additional Physics Tools
+pyquil>=3.3.0
+cirq>=1.0.0
+openfermion>=1.5.0
+
+# Development & Testing
+pytest>=7.2.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+
+# Optional GPU Support
+# torch>=1.13.0
+# jax>=0.4.0
+# jaxlib>=0.4.0

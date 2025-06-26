@@ -1,0 +1,73 @@
+{
+  "name": "@manasp21/rabi-mcp-server",
+  "version": "1.0.0",
+  "description": "Advanced MCP server specialized in Atomic, Molecular and Optical Physics",
+  "main": "src/server.py",
+  "scripts": {
+    "start": "python src/server.py",
+    "dev": "uvicorn src.server:app --reload --port 8000",
+    "test": "pytest tests/",
+    "lint": "flake8 src/ tests/",
+    "format": "black src/ tests/",
+    "type-check": "mypy src/",
+    "install-deps": "pip install -r requirements.txt",
+    "build": "python -m build",
+    "clean": "rm -rf build/ dist/ *.egg-info/"
+  },
+  "keywords": [
+    "atomic-physics",
+    "molecular-physics",
+    "optical-physics",
+    "quantum-mechanics",
+    "quantum-optics",
+    "spectroscopy",
+    "mcp-server",
+    "claude",
+    "physics-simulation",
+    "quantum-computing"
+  ],
+  "author": {
+    "name": "Manas Pandey",
+    "email": "manasp21@example.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manasp21/rabi-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/manasp21/rabi-mcp/issues"
+  },
+  "homepage": "https://github.com/manasp21/rabi-mcp#readme",
+  "engines": {
+    "node": ">=14.0.0",
+    "python": ">=3.8.0"
+  },
+  "mcp": {
+    "server": {
+      "command": "python",
+      "args": ["src/server.py"],
+      "env": {
+        "PYTHONPATH": "."
+      }
+    }
+  },
+  "smithery": {
+    "runtime": "container",
+    "port": 8000,
+    "health-check": "/health",
+    "config-schema": "./smithery.yaml"
+  },
+  "devDependencies": {
+    "@smithery/cli": "^1.0.0"
+  },
+  "files": [
+    "src/",
+    "requirements.txt",
+    "pyproject.toml",
+    "Dockerfile",
+    "smithery.yaml",
+    "README.md",
+    "LICENSE"
+  ]
+}

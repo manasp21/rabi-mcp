@@ -1,0 +1,150 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rabi-mcp-server"
+dynamic = ["version"]
+description = "Advanced MCP server specialized in Atomic, Molecular and Optical Physics"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Manas Pandey", email = "manasp21@example.com"},
+]
+maintainers = [
+    {name = "Manas Pandey", email = "manasp21@example.com"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+keywords = [
+    "atomic-physics",
+    "molecular-physics",
+    "optical-physics",
+    "quantum-mechanics",
+    "quantum-optics",
+    "spectroscopy",
+    "mcp-server",
+    "claude",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "matplotlib>=3.6.0",
+    "sympy>=1.11.0",
+    "qutip>=4.7.0",
+    "qiskit>=0.39.0",
+    "pennylane>=0.28.0",
+    "ase>=3.22.0",
+    "mcp>=1.0.0",
+    "fastapi>=0.95.0",
+    "uvicorn>=0.20.0",
+    "pydantic>=1.10.0",
+    "python-multipart>=0.0.5",
+    "numba>=0.56.0",
+    "h5py>=3.8.0",
+    "joblib>=1.2.0",
+    "plotly>=5.12.0",
+    "seaborn>=0.11.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.2.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=2.20.0",
+]
+gpu = [
+    "torch>=1.13.0",
+    "jax>=0.4.0",
+    "jaxlib>=0.4.0",
+]
+quantum = [
+    "pyquil>=3.3.0",
+    "cirq>=1.0.0",
+    "openfermion>=1.5.0",
+]
+all = [
+    "rabi-mcp-server[dev,gpu,quantum]",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/manasp21/rabi-mcp"
+"Documentation" = "https://github.com/manasp21/rabi-mcp/docs"
+"Repository" = "https://github.com/manasp21/rabi-mcp"
+"Bug Tracker" = "https://github.com/manasp21/rabi-mcp/issues"
+
+[project.scripts]
+rabi-mcp-server = "src.server:main"
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.setuptools_scm]
+write_to = "src/_version.py"
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "gpu: marks tests requiring GPU",
+]

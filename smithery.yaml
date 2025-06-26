@@ -1,0 +1,47 @@
+version: 1
+runtime: "container"
+build:
+  dockerfile: "Dockerfile"
+  dockerBuildPath: "."
+startCommand:
+  type: "http"
+  port: 8000
+configSchema:
+  type: "object"
+  properties:
+    computational_backend:
+      type: "string"
+      enum: ["numpy", "jax", "numba"]
+      default: "numpy"
+      description: "Computational backend for numerical calculations"
+    max_hilbert_dim:
+      type: "integer"
+      default: 1000
+      minimum: 10
+      maximum: 10000
+      description: "Maximum Hilbert space dimension for quantum systems"
+    enable_gpu:
+      type: "boolean"
+      default: false
+      description: "Enable GPU acceleration if available"
+    precision:
+      type: "string"
+      enum: ["single", "double"]
+      default: "double"
+      description: "Numerical precision for calculations"
+    enable_parallel:
+      type: "boolean"
+      default: true
+      description: "Enable parallel processing for computations"
+    cache_results:
+      type: "boolean"
+      default: true
+      description: "Cache computation results for faster repeated calculations"
+  required: []
+exampleConfig:
+  computational_backend: "numpy"
+  max_hilbert_dim: 500
+  enable_gpu: false
+  precision: "double"
+  enable_parallel: true
+  cache_results: true
