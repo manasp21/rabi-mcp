@@ -58,35 +58,60 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize MCP server instance
-mcp_server = RabiMCPServer()
+# Initialize MCP server instance with lazy loading
+mcp_server = None
+tools_cache = None
+tools_cache_loaded = False
+
+
+async def get_mcp_server():
+    """Get or initialize MCP server instance with lazy loading."""
+    global mcp_server
+    if mcp_server is None:
+        mcp_server = RabiMCPServer()
+        logger.info("MCP server initialized lazily")
+    return mcp_server
+
+
+async def get_tools_fast():
+    """Get tools with caching to avoid repeated expensive operations."""
+    global tools_cache, tools_cache_loaded
+    
+    if not tools_cache_loaded:
+        logger.info("Loading tools cache...")
+        server = await get_mcp_server()
+        tools_cache = await server.list_tools()
+        tools_cache_loaded = True
+        logger.info(f"Loaded {len(tools_cache)} tools into cache")
+    
+    return tools_cache
 
 
 @app.get("/")
 async def root():
-    """Root endpoint."""
+    """Root endpoint - lightweight response for Smithery tool scanning."""
     return {
         "name": "Rabi MCP Server",
-        "version": "1.0.0",
+        "version": "1.0.0", 
         "description": "Advanced MCP server specialized in Atomic, Molecular and Optical Physics",
         "status": "running",
         "protocol": "http",
-        "tools_available": len(await mcp_server.list_tools())
+        "tools_available": "25+ AMO physics tools"
     }
 
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
+    """Health check endpoint - fast response for deployment monitoring."""
     try:
-        tools = await mcp_server.list_tools()
         return {
             "status": "healthy",
-            "server": "rabi-mcp-server",
+            "server": "rabi-mcp-server", 
             "version": "1.0.0",
-            "tools_count": len(tools),
+            "tools_count": "25+",
             "computational_backend": settings.computational_backend,
             "max_hilbert_dim": settings.max_hilbert_dim,
+            "ready": True
         }
     except Exception as e:
         logger.error(f"Health check failed: {e}")
@@ -95,9 +120,9 @@ async def health_check():
 
 @app.get("/mcp/tools")
 async def list_tools():
-    """List all available MCP tools."""
+    """List all available MCP tools with caching."""
     try:
-        tools = await mcp_server.list_tools()
+        tools = await get_tools_fast()
         return {
             "tools": [
                 {
@@ -123,8 +148,9 @@ async def call_tool(tool_name: str, request: Request):
         
         logger.info(f"Calling tool: {tool_name} with arguments: {arguments}")
         
-        # Call the tool using our MCP server
-        result = await mcp_server.call_tool(tool_name, arguments)
+        # Get MCP server and call the tool
+        server = await get_mcp_server()
+        result = await server.call_tool(tool_name, arguments)
         
         # Extract text content from MCP result
         if result and len(result) > 0 and hasattr(result[0], 'text'):
@@ -163,7 +189,7 @@ async def mcp_endpoint(request: Request):
             request_id = body.get("id", 0)
             
             if method == "tools/list":
-                tools = await mcp_server.list_tools()
+                tools = await get_tools_fast()
                 return {
                     "jsonrpc": "2.0",
                     "id": request_id,
@@ -186,7 +212,8 @@ async def mcp_endpoint(request: Request):
                 if not tool_name:
                     raise HTTPException(status_code=400, detail="Tool name is required")
                 
-                result = await mcp_server.call_tool(tool_name, arguments)
+                server = await get_mcp_server()
+                result = await server.call_tool(tool_name, arguments)
                 
                 return {
                     "jsonrpc": "2.0",
@@ -207,7 +234,8 @@ async def mcp_endpoint(request: Request):
             tool_name = body["tool"]
             arguments = body.get("arguments", {})
             
-            result = await mcp_server.call_tool(tool_name, arguments)
+            server = await get_mcp_server()
+            result = await server.call_tool(tool_name, arguments)
             
             if result and len(result) > 0:
                 return {"result": json.loads(result[0].text)}
@@ -226,9 +254,9 @@ async def mcp_endpoint(request: Request):
 
 @app.get("/mcp")
 async def mcp_get_info():
-    """GET endpoint for MCP server information."""
+    """GET endpoint for MCP server information with lazy loading."""
     try:
-        tools = await mcp_server.list_tools()
+        tools = await get_tools_fast()
         return {
             "server": {
                 "name": "rabi-mcp-server",

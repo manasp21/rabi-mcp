@@ -16,7 +16,11 @@
       "Bash(git rm:*)",
       "Bash(true)",
       "Bash(git config:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(curl:*)",
+      "Bash(pip install:*)",
+      "Bash(source:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

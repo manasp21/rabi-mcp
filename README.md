@@ -81,9 +81,12 @@ rabi-mcp-server --test
 # Install Smithery CLI
 npm install -g @smithery/cli
 
-# Deploy to Smithery cloud
+# Deploy to Smithery cloud (REQUIRED FIRST STEP)
 npx @smithery/cli deploy https://github.com/manasp21/rabi-mcp.git
 ```
+
+**⚠️ Important: Deploy First!**
+The server URL `https://server.smithery.ai/@manasp21/rabi-mcp` will only become accessible **after** successful deployment. If you see "401 Unauthorized" or connection timeouts, it means the server hasn't been deployed yet.
 
 **What you get:**
 - ✅ Instant cloud deployment (no local setup needed)
@@ -92,11 +95,23 @@ npx @smithery/cli deploy https://github.com/manasp21/rabi-mcp.git
 - ✅ Web-based tool inspection and testing
 - ✅ Integration with Claude and other AI assistants
 
+**Deployment Process:**
+1. **Deploy**: Run the deploy command above
+2. **Wait**: Deployment typically takes 2-5 minutes
+3. **Verify**: Check deployment status in Smithery dashboard
+4. **Test**: Server will be accessible once deployment completes
+
 **Test on Smithery:**
 1. Go to [Smithery Dashboard](https://smithery.ai/)
-2. Find your deployed `rabi-mcp-server`
-3. Click "Connect" to test tools
-4. Try running: `simulate_two_level_atom` with sample parameters
+2. Wait for deployment status to show "Running"
+3. Find your deployed `rabi-mcp-server`
+4. Click "Connect" to test tools
+5. Try running: `simulate_two_level_atom` with sample parameters
+
+**Troubleshooting:**
+- **"401 Unauthorized"**: Server not deployed yet - run deploy command first
+- **"Connection timeout"**: Server still building - wait a few more minutes
+- **"Please configure server"**: Deployment failed - check build logs in dashboard
 
 ---
 

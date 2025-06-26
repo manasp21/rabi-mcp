@@ -1,7 +1,0 @@
-warning: in the working copy of '.claude/settings.local.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'test_docker_build.py', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'test_structure.py', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'TESTING.md', LF will be replaced by CRLF the next time Git touches it
-error: open("venv/bin/python"): Invalid argument
-fatal: Unable to process path venv/bin/python
