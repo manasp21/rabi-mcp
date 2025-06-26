@@ -24,9 +24,9 @@ from mcp.types import (
     TextContent,
 )
 
-# Import our MCP server class
-from .mcp_server import RabiMCPServer
-from .config.settings import settings
+# Lazy import to avoid loading heavy dependencies during Smithery scanning
+# from .mcp_server import RabiMCPServer
+# from .config.settings import settings
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -68,6 +68,8 @@ async def get_mcp_server():
     """Get or initialize MCP server instance with lazy loading."""
     global mcp_server
     if mcp_server is None:
+        logger.info("Lazy importing MCP server modules...")
+        from .mcp_server import RabiMCPServer
         mcp_server = RabiMCPServer()
         logger.info("MCP server initialized lazily")
     return mcp_server
@@ -87,35 +89,71 @@ async def get_tools_fast():
     return tools_cache
 
 
-async def get_tools_minimal():
-    """Get minimal tool list for fast discovery during Smithery scanning."""
-    return [
-        {
-            "name": "simulate_two_level_atom",
-            "description": "Simulate dynamics of a two-level atom in an electromagnetic field",
-            "inputSchema": {"type": "object", "properties": {}}
-        },
-        {
-            "name": "rabi_oscillations", 
-            "description": "Calculate Rabi oscillations for a two-level quantum system",
-            "inputSchema": {"type": "object", "properties": {}}
-        },
-        {
-            "name": "bec_simulation",
-            "description": "Simulate Bose-Einstein condensate dynamics using Gross-Pitaevskii equation",
-            "inputSchema": {"type": "object", "properties": {}}
-        },
-        {
-            "name": "absorption_spectrum",
-            "description": "Calculate absorption spectrum with various broadening mechanisms",
-            "inputSchema": {"type": "object", "properties": {}}
-        },
-        {
-            "name": "cavity_qed",
-            "description": "Simulate cavity quantum electrodynamics using Jaynes-Cummings model",
-            "inputSchema": {"type": "object", "properties": {}}
+# Static tool definitions for instant discovery (no imports needed)
+STATIC_TOOLS = [
+    {
+        "name": "simulate_two_level_atom",
+        "description": "Simulate dynamics of a two-level atom in an electromagnetic field",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "rabi_frequency": {"type": "number", "description": "Rabi frequency in Hz"},
+                "detuning": {"type": "number", "description": "Detuning from resonance in Hz"},
+                "evolution_time": {"type": "number", "description": "Evolution time in seconds"}
+            }
         }
-    ]
+    },
+    {
+        "name": "rabi_oscillations", 
+        "description": "Calculate Rabi oscillations for a two-level quantum system",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "rabi_frequency": {"type": "number", "description": "Rabi frequency in Hz"},
+                "max_time": {"type": "number", "description": "Maximum evolution time"},
+                "time_points": {"type": "integer", "description": "Number of time points"}
+            }
+        }
+    },
+    {
+        "name": "bec_simulation",
+        "description": "Simulate Bose-Einstein condensate dynamics using Gross-Pitaevskii equation",
+        "inputSchema": {
+            "type": "object", 
+            "properties": {
+                "particle_number": {"type": "integer", "description": "Number of particles"},
+                "scattering_length": {"type": "number", "description": "Scattering length in nm"}
+            }
+        }
+    },
+    {
+        "name": "absorption_spectrum",
+        "description": "Calculate absorption spectrum with various broadening mechanisms",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "transition_frequency": {"type": "number", "description": "Transition frequency"},
+                "linewidth": {"type": "number", "description": "Natural linewidth"}
+            }
+        }
+    },
+    {
+        "name": "cavity_qed",
+        "description": "Simulate cavity quantum electrodynamics using Jaynes-Cummings model", 
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "coupling_strength": {"type": "number", "description": "Coupling strength"},
+                "cavity_frequency": {"type": "number", "description": "Cavity frequency"}
+            }
+        }
+    }
+]
+
+
+def get_tools_minimal():
+    """Get minimal tool list for fast discovery - no async, no imports."""
+    return STATIC_TOOLS
 
 
 @app.get("/")
@@ -140,8 +178,8 @@ async def health_check():
             "server": "rabi-mcp-server", 
             "version": "1.0.0",
             "tools_count": "25+",
-            "computational_backend": settings.computational_backend,
-            "max_hilbert_dim": settings.max_hilbert_dim,
+            "computational_backend": "numpy",
+            "max_hilbert_dim": 1000,
             "ready": True
         }
     except Exception as e:
@@ -157,8 +195,8 @@ async def list_tools(request: Request):
         is_discovery = "smithery" in request.headers.get("user-agent", "").lower()
         
         if is_discovery:
-            logger.info("Smithery discovery - returning minimal tool list")
-            tools_data = await get_tools_minimal()
+            logger.info("Smithery discovery - returning static tool list")
+            tools_data = get_tools_minimal()
         else:
             logger.info("Full client request - returning complete tool list")
             tools = await get_tools_fast()
@@ -252,14 +290,39 @@ async def mcp_endpoint(request: Request):
             params = body.get("params", {})
             request_id = body.get("id", 0)
             
-            if method == "tools/list":
+            if method == "initialize":
+                # MCP initialization handshake - respond quickly without loading physics libs
+                logger.info("MCP initialize request - responding with basic capabilities")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {
+                        "protocolVersion": "2024-11-05",
+                        "capabilities": {
+                            "tools": {"listChanged": True},
+                            "resources": {},
+                            "prompts": {}
+                        },
+                        "serverInfo": {
+                            "name": "rabi-mcp-server",
+                            "version": "1.0.0"
+                        }
+                    }
+                }
+            
+            elif method == "notifications/initialized":
+                # Initialization complete notification - no response needed
+                logger.info("MCP initialized notification received")
+                return {"jsonrpc": "2.0", "id": request_id, "result": {}}
+            
+            elif method == "tools/list":
                 # Use minimal tool list for fast discovery during Smithery scanning
                 # Check if this is an initial discovery request vs a full client request
                 is_discovery = "smithery" in request.headers.get("user-agent", "").lower()
                 
                 if is_discovery:
-                    logger.info("Smithery discovery request - using minimal tool list")
-                    tools_data = await get_tools_minimal()
+                    logger.info("Smithery discovery request - using static tool list")
+                    tools_data = get_tools_minimal()
                 else:
                     logger.info("Full client request - using complete tool list")
                     tools = await get_tools_fast()
