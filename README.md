@@ -66,7 +66,7 @@ pip install -e .
 
 #### 3. Start the Server
 ```bash
-python src/server.py
+python -m src.mcp_server
 ```
 
 ## 🐳 Docker Deployment
@@ -118,7 +118,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "rabi-mcp": {
       "command": "python",
-      "args": ["path/to/rabi-mcp/src/server.py"],
+      "args": ["-m", "src.mcp_server"],
       "env": {
         "PYTHONPATH": "path/to/rabi-mcp"
       }

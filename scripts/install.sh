@@ -142,7 +142,7 @@ source "$INSTALL_DIR/venv/bin/activate"
 cd "$INSTALL_DIR/source"
 
 echo "Starting Rabi MCP Server..."
-python src/server.py "$@"
+python -m src.mcp_server "$@"
 EOF
     
     chmod +x "$INSTALL_DIR/start-server.sh"
@@ -241,7 +241,7 @@ if 'mcpServers' not in config:
 # Add Rabi MCP server
 config['mcpServers']['rabi-mcp'] = {
     "command": f"{install_dir}/venv/bin/python",
-    "args": [f"{install_dir}/source/src/server.py"],
+    "args": ["-m", "src.mcp_server"],
     "env": {
         "PYTHONPATH": f"{install_dir}/source"
     }

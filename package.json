@@ -2,10 +2,10 @@
   "name": "@manasp21/rabi-mcp-server",
   "version": "1.0.0",
   "description": "Advanced MCP server specialized in Atomic, Molecular and Optical Physics",
-  "main": "src/server.py",
+  "main": "src/mcp_server.py",
   "scripts": {
-    "start": "python src/server.py",
-    "dev": "uvicorn src.server:app --reload --port 8000",
+    "start": "python -m src.mcp_server",
+    "dev": "python -m src.mcp_server",
     "test": "pytest tests/",
     "lint": "flake8 src/ tests/",
     "format": "black src/ tests/",
@@ -46,7 +46,7 @@
   "mcp": {
     "server": {
       "command": "python",
-      "args": ["src/server.py"],
+      "args": ["-m", "src.mcp_server"],
       "env": {
         "PYTHONPATH": "."
       }
@@ -54,8 +54,7 @@
   },
   "smithery": {
     "runtime": "container",
-    "port": 8000,
-    "health-check": "/health",
+    "protocol": "mcp",
     "config-schema": "./smithery.yaml"
   },
   "devDependencies": {
