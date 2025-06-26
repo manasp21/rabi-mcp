@@ -29,9 +29,10 @@ COPY requirements.txt pyproject.toml ./
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
+# Copy source code and minimal server entry point
 COPY src/ ./src/
 COPY tests/ ./tests/
+COPY run_minimal_server.py ./
 
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash app && \
@@ -45,5 +46,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the HTTP MCP server
-CMD ["python", "-m", "src.http_server"]
+# Run the ultra-minimal HTTP MCP server for instant Smithery tool discovery
+CMD ["python", "run_minimal_server.py"]
