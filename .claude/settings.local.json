@@ -21,7 +21,8 @@
       "Bash(pip install:*)",
       "Bash(source:*)",
       "Bash(rm:*)",
-      "WebFetch(domain:modelcontextprotocol.io)"
+      "WebFetch(domain:modelcontextprotocol.io)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
