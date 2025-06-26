@@ -20,7 +20,8 @@
       "Bash(curl:*)",
       "Bash(pip install:*)",
       "Bash(source:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "WebFetch(domain:modelcontextprotocol.io)"
     ],
     "deny": []
   }
