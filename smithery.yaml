@@ -7,7 +7,7 @@ startCommand:
   type: "http"
   port: 8000
   command: "python"
-  args: ["-m", "src.http_server"]
+  args: ["run_minimal_server.py"]
 configSchema:
   type: "object"
   properties:
