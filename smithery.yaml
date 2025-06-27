@@ -7,15 +7,10 @@ startCommand:
   type: "http"
   port: 8000
   command: "python"
-  args: ["run_advanced_server.py"]  # Use advanced server entry point
+  args: ["-m", "src.http_server"]
 configSchema:
   type: "object"
   properties:
-    deployment_mode:
-      type: "string"
-      enum: ["basic", "advanced", "auto"]
-      default: "auto"
-      description: "Server deployment mode with automatic fallback"
     computational_backend:
       type: "string"
       enum: ["numpy", "jax", "numba"]
@@ -27,20 +22,6 @@ configSchema:
       minimum: 10
       maximum: 10000
       description: "Maximum Hilbert space dimension for quantum systems"
-    enable_advanced_tools:
-      type: "boolean"
-      default: true
-      description: "Enable Tier 2 advanced physics tools (lazy loaded)"
-    enable_research_tools:
-      type: "boolean"
-      default: true
-      description: "Enable Tier 3 research tools (cloud-assisted)"
-    memory_limit_mb:
-      type: "integer"
-      default: 512
-      minimum: 256
-      maximum: 1024
-      description: "Memory limit for resource management"
     enable_gpu:
       type: "boolean"
       default: false
@@ -56,22 +37,13 @@ configSchema:
       description: "Enable parallel processing for computations"
     cache_results:
       type: "boolean"
-      default: false
-      description: "Cache computation results (disabled for Smithery deployment)"
-    fallback_enabled:
-      type: "boolean"
       default: true
-      description: "Enable automatic fallback to basic server on errors"
+      description: "Cache computation results for faster repeated calculations"
   required: []
 exampleConfig:
-  deployment_mode: "auto"
   computational_backend: "numpy"
   max_hilbert_dim: 500
-  enable_advanced_tools: true
-  enable_research_tools: true
-  memory_limit_mb: 512
   enable_gpu: false
   precision: "double"
   enable_parallel: true
-  cache_results: false
-  fallback_enabled: true
+  cache_results: true

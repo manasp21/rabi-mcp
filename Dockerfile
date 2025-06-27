@@ -29,16 +29,10 @@ COPY requirements.txt pyproject.toml ./
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
 
-# Cache bust to ensure fresh builds - change this value to force rebuild
-ARG CACHE_BUST=20241227-v2
-RUN echo "Cache bust: $CACHE_BUST"
-
 # Copy source code and server entry points
 COPY src/ ./src/
 COPY tests/ ./tests/
 COPY run_simple_server.py ./
-COPY run_advanced_server.py ./
-COPY run_diagnostic_server.py ./
 COPY test_startup.py ./
 
 # Create non-root user for security
@@ -53,5 +47,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the Advanced Rabi MCP Server with progressive enhancement
-CMD ["python", "run_advanced_server.py"]
+# Run the Rabi MCP Server with real quantum physics calculations
+CMD ["python", "run_simple_server.py"]
