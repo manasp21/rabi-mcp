@@ -32,7 +32,8 @@
       "Bash(__NEW_LINE__ echo -e \"\\n🔬 Physics tools available:\")",
       "Bash(__NEW_LINE__ echo -e \"\\n🚀 Smithery compatibility:\")",
       "Bash(__NEW_LINE__ echo -e \"\\n⚙️ Real physics calculations:\")",
-      "Bash(__NEW_LINE__ echo -e \"\\n✅ CONSOLIDATION COMPLETE - All systems consistent and working!\")"
+      "Bash(__NEW_LINE__ echo -e \"\\n✅ CONSOLIDATION COMPLETE - All systems consistent and working!\")",
+      "Bash(rg:*)"
     ],
     "deny": []
   }
