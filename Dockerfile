@@ -32,7 +32,6 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Copy source code and server entry points
 COPY src/ ./src/
 COPY tests/ ./tests/
-COPY run_minimal_server.py ./
 COPY run_simple_server.py ./
 COPY test_startup.py ./
 
@@ -48,5 +47,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the ultra-simple HTTP server for deployment testing (standard library only)
+# Run the Rabi MCP Server with real quantum physics calculations
 CMD ["python", "run_simple_server.py"]

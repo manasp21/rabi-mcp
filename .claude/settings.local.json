@@ -22,7 +22,17 @@
       "Bash(source:*)",
       "Bash(rm:*)",
       "WebFetch(domain:modelcontextprotocol.io)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(grep:*)",
+      "Bash(mv:*)",
+      "Bash(echo:*)",
+      "Bash(__NEW_LINE__ echo -e \"\\n=== Current entry points ===\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n=== Dockerfile still references old scripts ===\")",
+      "Bash(__NEW_LINE__)",
+      "Bash(__NEW_LINE__ echo -e \"\\n🔬 Physics tools available:\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n🚀 Smithery compatibility:\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n⚙️ Real physics calculations:\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n✅ CONSOLIDATION COMPLETE - All systems consistent and working!\")"
     ],
     "deny": []
   }
