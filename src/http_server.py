@@ -414,10 +414,10 @@ def simulate_two_level_atom_real(rabi_frequency: float, detuning: float, evoluti
             "rabi_period_s": rabi_period
         },
         "analysis": {
-            "max_excited_population": max(excited_populations),
-            "final_excited_population": excited_populations[-1],
-            "oscillation_frequency_hz": effective_rabi / (2 * np.pi),
-            "on_resonance": abs(detuning) < rabi_frequency / 10
+            "max_excited_population": float(max(excited_populations)),
+            "final_excited_population": float(excited_populations[-1]),
+            "oscillation_frequency_hz": float(effective_rabi / (2 * np.pi)),
+            "on_resonance": bool(abs(detuning) < rabi_frequency / 10)
         }
     }
 
@@ -464,9 +464,9 @@ def rabi_oscillations_real(rabi_frequency: float, max_time: float, time_points: 
             "peak_times": peaks
         },
         "analysis": {
-            "number_of_oscillations": max_time / rabi_period,
-            "maximum_population_transfer": max(excited_populations),
-            "perfect_oscillations": abs(max(excited_populations) - 1.0) < 0.01
+            "number_of_oscillations": float(max_time / rabi_period),
+            "maximum_population_transfer": float(max(excited_populations)),
+            "perfect_oscillations": bool(abs(max(excited_populations) - 1.0) < 0.01)
         }
     }
 
@@ -549,9 +549,9 @@ def bec_simulation_real(particle_number: int, scattering_length: float, trap_fre
         },
         "analysis": {
             "interaction_regime": "strong" if abs(scattering_length) > 1 else "weak",
-            "thomas_fermi_parameter": particle_number * a_s / oscillator_length,
-            "quantum_depletion": min(0.1, abs(scattering_length) / 100),  # Simplified estimate
-            "condensate_fraction": max(0.9, 1 - abs(scattering_length) / 1000)
+            "thomas_fermi_parameter": float(particle_number * a_s / oscillator_length),
+            "quantum_depletion": float(min(0.1, abs(scattering_length) / 100)),  # Simplified estimate
+            "condensate_fraction": float(max(0.9, 1 - abs(scattering_length) / 1000))
         }
     }
 
@@ -629,10 +629,10 @@ def absorption_spectrum_real(transition_frequency: float, linewidth: float, temp
             "atomic_mass_amu": 87
         },
         "analysis": {
-            "quality_factor": Q_factor,
-            "doppler_temperature_k": temperature,
-            "thermal_velocity_m_per_s": np.sqrt(2 * kb * temperature / atomic_mass),
-            "recoil_limit_temperature_k": (transition_frequency / (2 * np.pi))**2 * (2 * np.pi * 1.055e-34)**2 / (2 * atomic_mass * kb)
+            "quality_factor": float(Q_factor),
+            "doppler_temperature_k": float(temperature),
+            "thermal_velocity_m_per_s": float(np.sqrt(2 * kb * temperature / atomic_mass)),
+            "recoil_limit_temperature_k": float((transition_frequency / (2 * np.pi))**2 * (2 * np.pi * 1.055e-34)**2 / (2 * atomic_mass * kb))
         }
     }
 
@@ -705,17 +705,17 @@ def cavity_qed_real(coupling_strength: float, cavity_frequency: float, atom_freq
             "vacuum_rabi_frequency": vacuum_rabi_freq
         },
         "quantum_properties": {
-            "cooperativity": cooperativity,
-            "strong_coupling_regime": strong_coupling,
-            "purcell_factor": coupling_strength**2 / abs(detuning) if detuning != 0 else float('inf'),
+            "cooperativity": float(cooperativity),
+            "strong_coupling_regime": bool(strong_coupling),
+            "purcell_factor": float(coupling_strength**2 / abs(detuning)) if detuning != 0 else float('inf'),
             "cavity_qed_regime": "strong" if strong_coupling else "weak"
         },
         "analysis": {
-            "max_excited_population": max(excited_populations),
-            "oscillation_period_s": 2 * np.pi / vacuum_rabi_freq,
-            "average_photon_number": np.mean(photon_numbers),
-            "antibunching_present": np.any(g2_values < 0.9),
-            "maximum_entanglement": max(entanglement_values)
+            "max_excited_population": float(max(excited_populations)),
+            "oscillation_period_s": float(2 * np.pi / vacuum_rabi_freq),
+            "average_photon_number": float(np.mean(photon_numbers)),
+            "antibunching_present": bool(np.any(g2_values < 0.9)),
+            "maximum_entanglement": float(max(entanglement_values))
         }
     }
 
