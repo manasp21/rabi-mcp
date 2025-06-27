@@ -7,7 +7,7 @@ startCommand:
   type: "http"
   port: 8000
   command: "python"
-  args: ["-c", "import sys; sys.path.append('src'); from advanced_server import main; main()"]  # Direct advanced server
+  args: ["run_advanced_server.py"]  # Use advanced server entry point
 configSchema:
   type: "object"
   properties:
