@@ -4,6 +4,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/)
 [![Smithery](https://img.shields.io/badge/smithery-deployable-green.svg)](https://smithery.ai/)
+[![smithery badge](https://smithery.ai/badge/@manasp21/rabi-mcp)](https://smithery.ai/server/@manasp21/rabi-mcp)
 
 **Atomic, Molecular and Optical (AMO) Physics MCP Server**
 
