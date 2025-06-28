@@ -1,0 +1,3 @@
+- never commit yourself
+- never use emojis
+- write as human as possible

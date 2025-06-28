@@ -1,4 +1,4 @@
-# 🔬 Rabi MCP Server
+# Rabi MCP Server
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -9,9 +9,9 @@
 
 Rabi MCP Server is a Model Context Protocol (MCP) server that provides essential quantum physics simulation tools for Claude and other AI assistants. Named after the Rabi oscillations fundamental to quantum optics, this server offers 5 core tools for simulating basic quantum systems and analyzing AMO physics phenomena.
 
-## ✨ Core Features
+## Core Features
 
-### 🔬 Available Physics Tools (5)
+### Available Physics Tools (5)
 
 **1. Two-Level Atom Simulation**
 - Simulates quantum dynamics of two-level atomic systems
@@ -38,11 +38,11 @@ Rabi MCP Server is a Model Context Protocol (MCP) server that provides essential
 - Atom-photon coupling dynamics
 - Strong and weak coupling regime analysis
 
-## 📦 Installation Methods
+## Installation Methods
 
 Choose your preferred installation method below. All methods give you access to the same 5 core AMO physics tools.
 
-### 🚀 Method 1: Smithery Cloud (Recommended)
+### Method 1: Smithery Cloud (Recommended)
 
 **Deploy directly to the cloud with zero local setup:**
 
@@ -52,11 +52,11 @@ npx @smithery/cli deploy https://github.com/manasp21/rabi-mcp.git
 ```
 
 **What you get:**
-- ✅ Instant cloud deployment (no local setup needed)
-- ✅ Automatic scaling and resource management
-- ✅ Built-in configuration management
-- ✅ 5 core physics tools ready to use
-- ✅ Integration with Claude and other AI assistants
+- Instant cloud deployment (no local setup needed)
+- Automatic scaling and resource management
+- Built-in configuration management
+- 5 core physics tools ready to use
+- Integration with Claude and other AI assistants
 
 **Deployment Process:**
 1. **Deploy**: Run the deploy command above
@@ -64,7 +64,7 @@ npx @smithery/cli deploy https://github.com/manasp21/rabi-mcp.git
 3. **Verify**: Check deployment status in Smithery dashboard
 4. **Test**: Server will be accessible once deployment completes
 
-### 🛠️ Method 2: Manual Installation
+### Method 2: Manual Installation
 
 **For local development and testing:**
 
@@ -87,7 +87,7 @@ python run_simple_server.py
 
 ---
 
-### 🐳 Method 3: Docker
+### Method 3: Docker
 
 **Build and run with Docker:**
 
@@ -101,7 +101,7 @@ docker run -p 8000:8000 rabi-mcp-server
 
 ---
 
-## 🧪 Testing Your Installation
+## Testing Your Installation
 
 ### Quick Test
 
@@ -121,11 +121,11 @@ result = execute_physics_tool('simulate_two_level_atom', {
     'detuning': 0, 
     'evolution_time': 1e-6
 })
-print('✅ Test passed!' if result['success'] else '❌ Test failed!')
+print('Test passed!' if result['success'] else 'Test failed!')
 "
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Basic configuration via environment variables:
 ```bash
@@ -134,7 +134,7 @@ export HOST=0.0.0.0
 export LOG_LEVEL=INFO
 ```
 
-## 🚀 Usage Examples
+## Usage Examples
 
 ### Tool 1: Two-Level Atom Simulation
 ```python
@@ -181,7 +181,7 @@ export LOG_LEVEL=INFO
 }
 ```
 
-## 🛠️ Available Tools (5)
+## Available Tools (5)
 
 1. **`simulate_two_level_atom`** - Two-level quantum system dynamics
 2. **`rabi_oscillations`** - Coherent population oscillations
@@ -189,15 +189,15 @@ export LOG_LEVEL=INFO
 4. **`absorption_spectrum`** - Spectral line analysis
 5. **`cavity_qed`** - Atom-cavity coupling dynamics
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Please submit issues and pull requests on GitHub.
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **NumPy/SciPy**: Scientific computing foundation
 - **MCP Protocol**: Model Context Protocol standard
@@ -207,8 +207,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 <div align="center">
 
-**🔬 Rabi MCP Server - AMO Physics Tools ⚛️**
+**Rabi MCP Server - AMO Physics Tools**
 
-[🚀 Get Started](https://github.com/manasp21/rabi-mcp) • [🛠️ Issues](https://github.com/manasp21/rabi-mcp/issues)
+[Get Started](https://github.com/manasp21/rabi-mcp) • [Issues](https://github.com/manasp21/rabi-mcp/issues)
 
 </div>
